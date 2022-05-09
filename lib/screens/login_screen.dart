@@ -7,6 +7,8 @@ class LoginScreen extends StatelessWidget {
   des() {}
   @override
   Widget build(BuildContext context) {
+
+    const img = "assets/demo.jpg";
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.pink,
@@ -20,6 +22,7 @@ class LoginScreen extends StatelessWidget {
                 const FlutterLogo(
                   size: 100,
                 ),
+                Image.asset(img,width: 50,),
                 const Text(
                   "Dribble",
                   style: TextStyle(
