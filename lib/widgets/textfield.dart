@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class AppTextField extends StatelessWidget {
   final String title;
   final bool obscureText;
-  const AppTextField({Key? key, required this.title, this.obscureText = false})
-      : super(key: key);
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
+  const AppTextField({
+    Key? key,
+    required this.title,
+    this.obscureText = false,
+    this.controller,
+    this.validator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +20,14 @@ class AppTextField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        TextField(
+        TextFormField(
+          validator: validator,
+          controller: controller,
           obscureText: obscureText,
           cursorColor: Colors.white,
           decoration: InputDecoration(
@@ -31,6 +40,7 @@ class AppTextField extends StatelessWidget {
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(10),
             ),
+            errorStyle: TextStyle(color: Colors.yellow),
             filled: true,
             fillColor: Colors.pink.shade200,
             labelStyle: TextStyle(color: Colors.white),
