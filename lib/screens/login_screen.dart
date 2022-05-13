@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:logindemo/model/loginResponse.dart';
 import 'package:logindemo/screens/home_screen.dart';
 import 'package:logindemo/screens/signup_screen.dart';
 import 'package:logindemo/widgets/textfield.dart';
+
+import '../services/api_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,7 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   final _auth = FirebaseAuth.instance;
-
+  String? token;
+  final _apiService = ApiServices();
+  LoginResponse? _loginResponse;
   onDispose() {
     emailController.clear();
     passwordController.clear();
@@ -26,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const img = "assets/demo.jpg";
+    // const img = "assets/demo.jpg";
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.pink,
@@ -91,15 +96,28 @@ class _LoginScreenState extends State<LoginScreen> {
                               setState(() {
                                 isLoading = true;
                               });
-                              await _auth
-                                  .signInWithEmailAndPassword(
-                                      email: emailController.text.trim(),
-                                      password: passwordController.text)
-                                  .then((value) => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomeScreen())));
+
+                              await _apiService.postRequest("/login", {
+                                "email": emailController.text,
+                                "password": passwordController.text
+                              }).then((value) {
+                                setState(() {
+                                  token = _loginResponse?.token!;
+                                });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeScreen()));
+                              });
+                              // await _auth
+                              //     .signInWithEmailAndPassword(
+                              //         email: emailController.text.trim(),
+                              //         password: passwordController.text)
+                              //     .then((value) => Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //             builder: (context) =>
+                              //                 const HomeScreen())));
                               emailController.clear();
                               passwordController.clear();
                               setState(() {

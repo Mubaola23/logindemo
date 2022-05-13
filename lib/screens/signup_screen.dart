@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:logindemo/screens/login_screen.dart';
+import 'package:logindemo/services/api_services.dart';
 import 'package:logindemo/widgets/textfield.dart';
+
+import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -15,7 +17,13 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+
+  //Using frebase Auth
   final _auth = FirebaseAuth.instance;
+
+  //Usin api service
+
+  final _apiService = ApiServices();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -93,15 +101,24 @@ class _SignupScreenState extends State<SignupScreen> {
                               setState(() {
                                 isLoading = true;
                               });
-                              await _auth
-                                  .createUserWithEmailAndPassword(
-                                      email: emailController.text.trim(),
-                                      password: passwordController.text)
-                                  .then((value) => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginScreen())));
+                              await _apiService.postRequest("/register", {
+                                "email": emailController.text,
+                                "password": passwordController.text
+                              }).then((value) => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen())));
+
+                              // await _auth
+                              //     .createUserWithEmailAndPassword(
+                              //         email: emailController.text.trim(),
+                              //         password: passwordController.text)
+                              //     .then((value) => Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //             builder: (context) =>
+                              //                 const LoginScreen())));
                               emailController.clear();
                               passwordController.clear();
                               setState(() {
