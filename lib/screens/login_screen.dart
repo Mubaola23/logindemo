@@ -19,8 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
-  final _auth = FirebaseAuth.instance;
-  String? token;
+  // final _auth = FirebaseAuth.instance;
+  // String? token;
   final _apiService = ApiServices();
   LoginResponse? _loginResponse;
   onDispose() {
@@ -96,39 +96,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               setState(() {
                                 isLoading = true;
                               });
-
-                              await _apiService.postRequest("/login", {
+                              var res = await _apiService.post("/login", {
                                 "email": emailController.text,
                                 "password": passwordController.text
-                              }).then((value) {
-                                setState(() {
-                                  token = _loginResponse?.token!;
-                                });
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeScreen()));
                               });
-                              // await _auth
-                              //     .signInWithEmailAndPassword(
-                              //         email: emailController.text.trim(),
-                              //         password: passwordController.text)
-                              //     .then((value) => Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //             builder: (context) =>
-                              //                 const HomeScreen())));
-                              emailController.clear();
-                              passwordController.clear();
+                              _loginResponse = LoginResponse.fromJson(res);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => HomeScreen(
+                                        token: _loginResponse!.token!,
+                                      )));
                               setState(() {
                                 isLoading = false;
                               });
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Incorrect login details"),
-                                backgroundColor: Colors.black,
-                              ));
                             }
                           },
                           child: isLoading

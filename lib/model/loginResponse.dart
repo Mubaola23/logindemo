@@ -12,3 +12,4 @@ class LoginResponse {
         "token": token,
       };
 }
+

@@ -101,7 +101,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               setState(() {
                                 isLoading = true;
                               });
-                              await _apiService.postRequest("/register", {
+                              await _apiService.post("/register", {
                                 "email": emailController.text,
                                 "password": passwordController.text
                               }).then((value) => Navigator.push(
@@ -177,27 +177,27 @@ class _SignupScreenState extends State<SignupScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         color: Colors.blueAccent,
-                        child: Text(
+                        child: const Text(
                           "Facebook",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         color: Colors.blue,
-                        child: Text(
+                        child: const Text(
                           "Twitter",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         color: Colors.green,
-                        child: Text(
+                        child: const Text(
                           "Google",
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ],
